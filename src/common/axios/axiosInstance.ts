@@ -1,10 +1,7 @@
 import axios, { AxiosError } from "axios";
-import { API_URL } from "common/constants/env";
 import { FailedReqMsg } from "types/api.types";
 
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-});
+const axiosInstance = axios.create();
 
 axiosInstance.interceptors.response.use(
   (response) => response,

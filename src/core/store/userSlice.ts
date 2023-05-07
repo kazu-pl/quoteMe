@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance, axiosSecureInstance } from "common/axios";
-import { removeTokens, saveTokens, getTokens } from "common/auth/tokens";
+import {
+  removeAccessToken,
+  saveAccessToken,
+  getAccessToken,
+} from "common/auth/tokens";
 import {
   // AccessToken,
   FailedReqMsg,
@@ -29,8 +33,8 @@ export const login = createAsyncThunk(
   async (values: RequestLoginCredentials, { rejectWithValue }) => {
     try {
       const response = await axios.post<any>("/api/login", values);
-      saveTokens(response.data);
       console.log({ odpowiedz_na_froncie: response.data });
+      saveAccessToken(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue((error as FailedReqMsg).message);
@@ -42,7 +46,7 @@ export const register = createAsyncThunk(
   "register",
   async (values: RequestRegisterCredentials, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post<any>("/register", values);
+      const response = await axiosInstance.post<any>("/api/register", values);
       return response.data;
     } catch (error) {
       return rejectWithValue((error as FailedReqMsg).message);
@@ -51,28 +55,25 @@ export const register = createAsyncThunk(
 );
 
 export const refreshAccessToken = async (): Promise<any> => {
-  const tokens = getTokens();
+  const token = getAccessToken();
 
   const response = await axiosInstance.post<any>("/refresh-token", {
-    refreshToken: tokens!.refreshToken,
+    refreshToken: token,
   });
-  saveTokens({
-    accessToken: response.data.accessToken,
-    refreshToken: tokens!.refreshToken,
-  });
+  saveAccessToken(response.data.accessToken);
   return response.data;
 };
 
 export const logout = createAsyncThunk(
   "logout",
   async (_, { rejectWithValue }) => {
-    const tokens = getTokens();
+    const tokens = getAccessToken();
     try {
-      removeTokens(); // you have to remove tokens before request, removing after awaiting for response will run iunto infinite loop of redirecting between dashboard and login
+      removeAccessToken(); // you have to remove tokens before request, removing after awaiting for response will run iunto infinite loop of redirecting between dashboard and login
       const response = await axiosInstance.post("/logout", tokens);
       return response.data;
     } catch (error) {
-      removeTokens();
+      removeAccessToken();
       return rejectWithValue((error as FailedReqMsg).message);
     }
   }
@@ -171,7 +172,7 @@ export const deleteUserAccount = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosSecureInstance.delete(`/users/me/delete`);
-      removeTokens();
+      removeAccessToken();
       return response.data;
     } catch (error) {
       return rejectWithValue((error as FailedReqMsg).message);

@@ -25,3 +25,8 @@ export interface FailedReqMsg {
   /** response error */
   error?: any;
 }
+
+export interface SuccessfulReqMsg {
+  /** message you can dispaly on front application */
+  message: string;
+}
