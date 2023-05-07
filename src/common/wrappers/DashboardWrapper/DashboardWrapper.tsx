@@ -1,9 +1,9 @@
 import { Button } from "antd";
 import DashboardLayout, { DashboardLayoutProps } from "layouts/Dashboard";
-import { useAppDispatch, useAppSelector } from "common/store/hooks";
-import { logout, selectUserProfile } from "core/store/userSlice";
+import { useAppDispatch } from "common/store/hooks";
+import { logout } from "core/store/userSlice";
 import { useRouter } from "next/router";
-import { PATHS_CORE, PATHS_DASHBOARD } from "common/constants/paths";
+import { PATHS_CORE, PATHS_QUOTES } from "common/constants/paths";
 import {
   StyledDesktopBtnWrapper,
   StyledMobileBtnWrapper,
@@ -15,7 +15,6 @@ import {
 } from "@ant-design/icons";
 // import Link from "next/link";
 import { Fragment } from "react";
-import { API_URL } from "common/constants/env";
 
 export interface DashboardWrapperProps
   extends Pick<DashboardLayoutProps, "title" | "children"> {}
@@ -23,7 +22,6 @@ export interface DashboardWrapperProps
 const DashboardWrapper = ({ title, children }: DashboardWrapperProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const userProfileData = useAppSelector(selectUserProfile);
 
   const handleLogout = async () => {
     try {
@@ -38,27 +36,20 @@ const DashboardWrapper = ({ title, children }: DashboardWrapperProps) => {
   return (
     <DashboardLayout
       title={title}
-      subTitle={
-        userProfileData
-          ? `Witaj, ${userProfileData.name} ${userProfileData.surname}`
-          : ""
-      }
-      avatarUrl={
-        userProfileData?.avatar ? API_URL + userProfileData?.avatar : ""
-      }
+      avatarUrl={""}
       sidebarItems={[
         {
           variant: "no-dropdown",
           label: "Dashboard",
           icon: <AppstoreOutlined />,
-          to: PATHS_DASHBOARD.DASHBOARD,
+          to: PATHS_QUOTES.QUOTES_LIST,
+          renderBottomLine: true,
         },
         {
           variant: "no-dropdown",
           icon: <PieChartOutlined />,
-          label: "accout",
-          to: PATHS_CORE.ACCOUNT,
-          renderBottomLine: true,
+          label: "Dodaj cytat",
+          to: PATHS_QUOTES.QUOTES_ADD,
         },
       ]}
       extra={

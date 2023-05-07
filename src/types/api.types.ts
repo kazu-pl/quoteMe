@@ -30,3 +30,9 @@ export interface SuccessfulReqMsg {
   /** message you can dispaly on front application */
   message: string;
 }
+
+export interface RequestAddQuote {
+  author: string;
+  quote: string;
+  posted: number;
+}
