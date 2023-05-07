@@ -8,7 +8,7 @@ import {
   SuccessfulReqMsg,
 } from "types/api.types";
 
-const countHandler: NextApiHandler = async (request, response) => {
+const registerHandler: NextApiHandler = async (request, response) => {
   const body = request.body as RequestRegisterCredentials;
 
   try {
@@ -22,4 +22,4 @@ const countHandler: NextApiHandler = async (request, response) => {
   }
 };
 
-export default countHandler;
+export default registerHandler;
