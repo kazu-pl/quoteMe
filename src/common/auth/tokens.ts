@@ -1,17 +1,36 @@
-import { LOCALSTORAGE_AUTH_TOKEN } from "common/constants/auth";
+import {
+  LOCALSTORAGE_AUTH_TOKEN,
+  LOCALSTORAGE_USER_ID,
+} from "common/constants/auth";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
 export const saveAccessToken = (token: string) => {
   localStorage.setItem(LOCALSTORAGE_AUTH_TOKEN, JSON.stringify(token));
 };
 
+export const saveUserId = (userId: number) => {
+  localStorage.setItem(LOCALSTORAGE_USER_ID, JSON.stringify(userId));
+};
+
 export const getAccessToken = (): string | null => {
   if (typeof window !== "undefined") {
-    const tokens = localStorage.getItem(LOCALSTORAGE_AUTH_TOKEN);
+    const token = localStorage.getItem(LOCALSTORAGE_AUTH_TOKEN);
 
-    if (!tokens) return null;
+    if (!token) return null;
 
-    return JSON.parse(tokens);
+    return JSON.parse(token);
+  } else {
+    return null;
+  }
+};
+
+export const getUserId = (): number | null => {
+  if (typeof window !== "undefined") {
+    const userId = localStorage.getItem(LOCALSTORAGE_USER_ID);
+
+    if (!userId) return null;
+
+    return JSON.parse(userId);
   } else {
     return null;
   }
@@ -25,4 +44,8 @@ export const isTokenExpired = (token: string) => {
 
 export const removeAccessToken = () => {
   localStorage.removeItem(LOCALSTORAGE_AUTH_TOKEN);
+};
+
+export const removeUserId = () => {
+  localStorage.removeItem(LOCALSTORAGE_USER_ID);
 };

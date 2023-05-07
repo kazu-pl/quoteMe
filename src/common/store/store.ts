@@ -8,6 +8,7 @@ import {
 import { Middleware } from "@reduxjs/toolkit";
 
 import userSlice, { logout } from "core/store/userSlice";
+import quotesSlice from "features/quotes/quotesSlice";
 
 export const throwMiddleware: Middleware = () => (next) => (action) => {
   next(action);
@@ -18,6 +19,7 @@ export const throwMiddleware: Middleware = () => (next) => (action) => {
 
 const combinedReducer = combineReducers({
   user: userSlice,
+  quotes: quotesSlice,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;

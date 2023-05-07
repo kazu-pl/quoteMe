@@ -9,6 +9,7 @@ export const PATHS_CORE = {
   ACCOUNT: "/account",
 };
 
-export const PATHS_DASHBOARD = {
-  DASHBOARD: "/dashboard",
+export const PATHS_QUOTES = {
+  QUOTES_LIST: "/quotes",
+  QUOTES_ADD: "/quotes/add",
 };

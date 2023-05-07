@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import yup from "common/yup";
 import Box from "components/Box";
 import Link from "next/link";
-import { PATHS_CORE, PATHS_DASHBOARD } from "common/constants/paths";
+import { PATHS_CORE, PATHS_QUOTES } from "common/constants/paths";
 import { RequestLoginCredentials } from "types/api.types";
 import HeadDecorator from "components/HeadDecorator";
 import { useAppDispatch } from "common/store/hooks";
@@ -18,7 +18,7 @@ import { getAccessToken, isTokenExpired } from "common/auth/tokens";
 import { useEffect, useLayoutEffect, useState } from "react";
 
 const validationSchema = yup.object({
-  username: yup.string().email().required(),
+  username: yup.string().required(),
   password: yup.string().required(),
 });
 
@@ -34,7 +34,7 @@ const IndexPage: NextPage = () => {
 
   useLayoutEffect(() => {
     if (token && !isTokenExpired(token)) {
-      router.push(PATHS_DASHBOARD.DASHBOARD);
+      router.push(PATHS_QUOTES.QUOTES_LIST);
     } else {
       setIsCheckingTokens(false);
     }
@@ -63,7 +63,7 @@ const IndexPage: NextPage = () => {
     try {
       await dispatch(login(values));
 
-      router.push(PATHS_DASHBOARD.DASHBOARD);
+      router.push(PATHS_QUOTES.QUOTES_LIST);
     } catch (error) {
       notification.error({
         message: null,
