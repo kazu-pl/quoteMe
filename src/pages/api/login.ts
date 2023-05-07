@@ -1,24 +1,21 @@
 import axios from "axios";
 
+import { API_URL } from "common/constants/env";
 import type { NextApiHandler } from "next";
+import { FailedReqMsg, RequestLoginCredentials } from "types/api.types";
 
-const countHandler: NextApiHandler = async (request, response) => {
-  const values: any = request.body;
+const loginHandler: NextApiHandler = async (request, response) => {
+  const body = request.body as RequestLoginCredentials;
+
   try {
-    const res = await axios.post(
-      "https://quote-app-mog8.onrender.com/user/register",
-      {
-        username: "ktosfajny",
-        password: "qwerty123",
-      }
-    );
-
-    console.log({ res });
+    const res = await axios.post(`${API_URL}/user/login`, body);
 
     response.json({ data: res.data });
   } catch (err) {
-    response.status(400).json({ message: "błąd jakiś" });
+    response.status(400).json({
+      message: "Wystąpił błąd. Sprawdź połączenie i poprawność danych",
+    } as FailedReqMsg);
   }
 };
 
-export default countHandler;
+export default loginHandler;

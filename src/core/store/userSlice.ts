@@ -16,7 +16,6 @@ import {
   RequestRegisterCredentials,
 } from "types/api.types";
 import { RootState } from "common/store/store";
-import axios from "axios";
 
 interface UserState {
   userId: string | null;
@@ -32,10 +31,13 @@ export const login = createAsyncThunk(
   "login",
   async (values: RequestLoginCredentials, { rejectWithValue }) => {
     try {
-      const response = await axios.post<any>("/api/login", values);
-      console.log({ odpowiedz_na_froncie: response.data });
-      saveAccessToken(response.data);
-      return response.data;
+      const response = await axiosInstance.post<{ data: string }>(
+        "/api/login",
+        values
+      );
+
+      saveAccessToken(response.data.data);
+      return response.data.data;
     } catch (error) {
       return rejectWithValue((error as FailedReqMsg).message);
     }
@@ -46,7 +48,7 @@ export const register = createAsyncThunk(
   "register",
   async (values: RequestRegisterCredentials, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post<any>("/api/register", values);
+      const response = await axiosInstance.post("/api/register", values);
       return response.data;
     } catch (error) {
       return rejectWithValue((error as FailedReqMsg).message);
