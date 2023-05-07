@@ -1,16 +1,11 @@
 import { LOCALSTORAGE_AUTH_TOKEN } from "common/constants/auth";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
-interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export const saveTokens = (tokens: Tokens) => {
-  localStorage.setItem(LOCALSTORAGE_AUTH_TOKEN, JSON.stringify(tokens));
+export const saveAccessToken = (token: string) => {
+  localStorage.setItem(LOCALSTORAGE_AUTH_TOKEN, JSON.stringify(token));
 };
 
-export const getTokens = (): Tokens | null => {
+export const getAccessToken = (): string | null => {
   if (typeof window !== "undefined") {
     const tokens = localStorage.getItem(LOCALSTORAGE_AUTH_TOKEN);
 
@@ -28,6 +23,6 @@ export const isTokenExpired = (token: string) => {
   return decodedToken.exp ? decodedToken.exp < Date.now() / 1000 : true;
 };
 
-export const removeTokens = () => {
+export const removeAccessToken = () => {
   localStorage.removeItem(LOCALSTORAGE_AUTH_TOKEN);
 };
