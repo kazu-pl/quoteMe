@@ -1,10 +1,11 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 import { getAccessToken } from "common/auth/tokens";
 import {
   FailedReqMsg,
   ResponseSingleQuote,
   RequestAddQuote,
+  RequestEditQuote,
 } from "types/api.types";
 import { RootState } from "common/store/store";
 import axios from "axios";
@@ -32,6 +33,24 @@ export const addQuote = createAsyncThunk(
   async (values: RequestAddQuote, { rejectWithValue }) => {
     try {
       const response = await axios.post("/api/quotes/add", {
+        ...values,
+        token: getAccessToken(),
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        typeof error === "string" ? error : (error as FailedReqMsg).message
+      );
+    }
+  }
+);
+
+export const editQuote = createAsyncThunk(
+  "editQuote",
+  async (values: RequestEditQuote & { id: number }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/quotes/edit", {
         ...values,
         token: getAccessToken(),
       });
@@ -85,7 +104,11 @@ export const removeQuote = createAsyncThunk(
 const quotesSlice = createSlice({
   name: "quotesSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    setQuotesList(state, action: PayloadAction<null | ResponseSingleQuote[]>) {
+      state.quotesList.data = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getSingleUserAllQuotes.pending, (state) => {
       state.quotesList.isLoading = true;
@@ -100,6 +123,7 @@ const quotesSlice = createSlice({
   },
 });
 
+export const { setQuotesList } = quotesSlice.actions;
 export default quotesSlice.reducer;
 
 export const selectQuotesList = (state: RootState) => state.quotes.quotesList;

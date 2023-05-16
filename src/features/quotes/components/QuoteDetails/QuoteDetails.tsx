@@ -1,5 +1,6 @@
 import {
   FailedReqMsg,
+  RequestAddQuote,
   ResponseSingleQuote,
   SuccessfulReqMsg,
 } from "types/api.types";
@@ -7,8 +8,16 @@ import { Button, Modal, Typography, notification } from "antd";
 import { Dispatch, SetStateAction, useState } from "react";
 import Box from "components/Box/Box";
 import { EditOutlined, DeleteTwoTone } from "@ant-design/icons";
-import { useAppDispatch } from "common/store/hooks";
-import { removeQuote } from "features/quotes/quotesSlice";
+import { useAppDispatch, useAppSelector } from "common/store/hooks";
+import {
+  editQuote,
+  removeQuote,
+  selectQuotesList,
+  setQuotesList,
+} from "features/quotes/quotesSlice";
+import QuoteForm, { FormValues } from "features/quotes/components/QuoteForm";
+
+import { UseFormReset } from "react-hook-form";
 const { Title, Paragraph } = Typography;
 
 export interface QuoteDetailsProps {
@@ -24,6 +33,7 @@ const QuoteDetails = ({
 }: QuoteDetailsProps) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const { data: quotesList } = useAppSelector(selectQuotesList);
 
   const dispatch = useAppDispatch();
 
@@ -33,8 +43,14 @@ const QuoteDetails = ({
       const response = await dispatch(removeQuote(data.id));
 
       setSelectdQuote(null);
-      fetchItems();
-      notification.success({
+
+      if (quotesList?.length === 1) {
+        dispatch(setQuotesList([]));
+      } else {
+        fetchItems();
+      }
+
+      notification.info({
         message: null,
         description:
           typeof response.payload === "string"
@@ -49,6 +65,31 @@ const QuoteDetails = ({
       });
     }
   };
+
+  const handleEdit =
+    (reset: UseFormReset<RequestAddQuote>) => async (values: FormValues) => {
+      try {
+        const response = await dispatch(editQuote({ ...values, id: data.id }));
+
+        const { message } = response.payload as SuccessfulReqMsg;
+
+        notification.info({
+          message: null,
+          description: message,
+        });
+        setIsEditMode(false);
+        fetchItems();
+        setSelectdQuote(null);
+      } catch (error) {
+        const messageToDispaly =
+          typeof error === "string" ? error : (error as FailedReqMsg).message;
+
+        notification.error({
+          message: null,
+          description: messageToDispaly,
+        });
+      }
+    };
 
   return (
     <>
@@ -74,7 +115,16 @@ const QuoteDetails = ({
           </Box>
         </>
       ) : (
-        <Button onClick={() => setIsEditMode(false)}>Anuluj</Button>
+        <>
+          <QuoteForm
+            onSubmitFn={handleEdit}
+            okText="Aktualizuj"
+            additionalBtn={
+              <Button onClick={() => setIsEditMode(false)}>Anuluj</Button>
+            }
+            defaultValues={{ author: data.author, quote: data.quote }}
+          />
+        </>
       )}
 
       {
