@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import HeadDecorator from "components/HeadDecorator";
 import PrivateRoute from "common/router/PrivateRoute";
 import DashboardWrapper from "common/wrappers/DashboardWrapper";
-import { Button, Space, Typography } from "antd";
-import { useEffect } from "react";
+import { Button, Modal, Space, Typography } from "antd";
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "common/store/hooks";
 import {
   getSingleUserAllQuotes,
@@ -12,17 +12,30 @@ import {
 import Box from "components/Box/Box";
 import { Card, Spin } from "antd";
 import renderMaxLengthText from "utils/renderMaxLengthText";
-import Link from "next/link";
-import { PATHS_QUOTES } from "common/constants/paths";
-import { DeleteOutlined } from "@ant-design/icons";
+
+import { MoreOutlined } from "@ant-design/icons";
+import { ResponseSingleQuote } from "types/api.types";
+import QuoteDetails from "components/QuoteDetails/QuoteDetails";
 
 const DashboardPage: NextPage = () => {
+  const [selectedQuote, setSelectdQuote] = useState<null | ResponseSingleQuote>(
+    null
+  );
+
   const dispatch = useAppDispatch();
   const { data, isLoading, error } = useAppSelector(selectQuotesList);
 
-  useEffect(() => {
+  const fetchItems = useCallback(() => {
     dispatch(getSingleUserAllQuotes());
   }, [dispatch]);
+
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
+
+  useEffect(() => {
+    console.log({ selectedQuote });
+  }, [selectedQuote]);
 
   return (
     <>
@@ -61,23 +74,36 @@ const DashboardPage: NextPage = () => {
                       justifyContent="space-between"
                     >
                       <Box marginRight={8}>
-                        <Link href={PATHS_QUOTES.SINGLE_QUOTE(quote.id)}>
-                          <a>więcej...</a>
-                        </Link>
+                        <Button
+                          shape="circle"
+                          icon={<MoreOutlined />}
+                          onClick={() => setSelectdQuote(quote)}
+                        ></Button>
                       </Box>
-
-                      <Button
-                        icon={<DeleteOutlined />}
-                        onClick={() => alert("remove")}
-                        shape="circle"
-                      />
                     </Box>
                   }
                 >
-                  <p>{renderMaxLengthText(quote.quote)}</p>
+                  <p style={{ fontStyle: "italic" }}>
+                    {`"${renderMaxLengthText(quote.quote)}"`}
+                  </p>
                 </Card>
               ))}
           </Space>
+
+          <Modal
+            visible={!!selectedQuote}
+            title="Cytat"
+            footer={
+              <Button onClick={() => setSelectdQuote(null)}>Zamknij</Button>
+            }
+            onCancel={() => setSelectdQuote(null)}
+          >
+            <QuoteDetails
+              data={selectedQuote!}
+              setSelectdQuote={setSelectdQuote}
+              fetchItems={fetchItems}
+            />
+          </Modal>
         </DashboardWrapper>
       </PrivateRoute>
     </>
