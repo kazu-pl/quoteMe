@@ -20,7 +20,6 @@ axiosSecureInstance.interceptors.request.use((config) => {
 
   config.headers = {
     Authorization: `Bearer ${token}`,
-    // "Content-Type": "application/json", // ALTERNATIVE: if you hardcode content-type you don't need to parse body after refreshing accessToken. You also won't need to checking if body is instance of FormData
   };
 
   return config;
@@ -46,13 +45,14 @@ axiosSecureInstance.interceptors.response.use(
         const axiosError = error as AxiosError;
 
         window.location.href = `${PATHS_CORE.LOGIN}?${logoutQueryKey}=${logoutQueryValue}`;
-        // history.push(PATHS_CORE.LOGOUT); // TODO: this won't work in react-router 6. You will get pushed to /logout but application won't be pushed to that url. Just url will change. Instead, use  window.location.href which will reload application
 
-        // alert("you were logged out due to ended session");
-        //  to show snackbar you would need to to: history.push(`${PATHS_CORE.LOGOUT}?reason=refresh-token_expired`); and then the same logic in Logout and Login components
         if (axiosError.response) {
           if (axiosError.response.data) {
-            return Promise.reject(axiosError.response.data);
+            return Promise.reject(
+              typeof axiosError.response.data === "string"
+                ? ({ message: axiosError.response.data } as FailedReqMsg)
+                : axiosError.response.data
+            );
           } else {
             return Promise.reject({
               message:
@@ -63,7 +63,11 @@ axiosSecureInstance.interceptors.response.use(
         return Promise.reject(axiosError);
       } else {
         if (error.response.data) {
-          return Promise.reject(error.response.data);
+          return Promise.reject(
+            typeof error.response.data === "string"
+              ? ({ message: error.response.data } as FailedReqMsg)
+              : error.response.data
+          );
         } else {
           return Promise.reject({
             message: "An error occured but server didn't send any data",

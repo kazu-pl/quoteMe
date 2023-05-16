@@ -11,5 +11,6 @@ export const PATHS_CORE = {
 
 export const PATHS_QUOTES = {
   QUOTES_LIST: "/quotes",
-  QUOTES_ADD: "/quotes/add",
+  QUOTES_ADD: "/quotes/add-quote",
+  SINGLE_QUOTE: (id: number | string) => `/quotes/${id}`,
 };
