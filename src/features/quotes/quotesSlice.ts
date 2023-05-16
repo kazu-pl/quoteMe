@@ -64,6 +64,24 @@ export const getSingleUserAllQuotes = createAsyncThunk(
   }
 );
 
+export const removeQuote = createAsyncThunk(
+  "removeQuote",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`/api/quotes/delete`, {
+        id,
+        token: getAccessToken(),
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        typeof error === "string" ? error : (error as FailedReqMsg).message
+      );
+    }
+  }
+);
+
 const quotesSlice = createSlice({
   name: "quotesSlice",
   initialState,

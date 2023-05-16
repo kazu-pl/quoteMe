@@ -35,7 +35,7 @@ const addQuoteHandler: NextApiHandler = async (request, response) => {
 
     response.json({ message: "Pomyślnie utworzono cytat" } as SuccessfulReqMsg);
   } catch (err) {
-    console.log({ addQuoteHandler_err: (err as any).response.data });
+    console.log({ addQuoteHandler_err: err });
     response.status(400).json({
       message: "Wystąpił błąd. Sprawdź połączenie i poprawność danych",
     } as FailedReqMsg);
