@@ -15,7 +15,7 @@ import renderMaxLengthText from "utils/renderMaxLengthText";
 
 import { MoreOutlined } from "@ant-design/icons";
 import { ResponseSingleQuote } from "types/api.types";
-import QuoteDetails from "components/QuoteDetails/QuoteDetails";
+import QuoteDetails from "features/quotes/components/QuoteDetails";
 
 const DashboardPage: NextPage = () => {
   const [selectedQuote, setSelectdQuote] = useState<null | ResponseSingleQuote>(
@@ -32,10 +32,6 @@ const DashboardPage: NextPage = () => {
   useEffect(() => {
     fetchItems();
   }, [fetchItems]);
-
-  useEffect(() => {
-    console.log({ selectedQuote });
-  }, [selectedQuote]);
 
   return (
     <>

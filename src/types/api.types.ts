@@ -55,3 +55,8 @@ export interface DecodedToken {
   sub: string;
   userLoggedId: number;
 }
+
+export interface RequestEditQuote {
+  author: string;
+  quote: string;
+}
