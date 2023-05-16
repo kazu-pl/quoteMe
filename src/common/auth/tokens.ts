@@ -1,15 +1,14 @@
-import {
-  LOCALSTORAGE_AUTH_TOKEN,
-  LOCALSTORAGE_USER_ID,
-} from "common/constants/auth";
+import { LOCALSTORAGE_AUTH_TOKEN } from "common/constants/auth";
 import jwtDecode, { JwtPayload } from "jwt-decode";
+import { DecodedToken } from "types/api.types";
+
+export interface UserData {
+  userId: number | null;
+  userEmail: string | null;
+}
 
 export const saveAccessToken = (token: string) => {
   localStorage.setItem(LOCALSTORAGE_AUTH_TOKEN, JSON.stringify(token));
-};
-
-export const saveUserId = (userId: number) => {
-  localStorage.setItem(LOCALSTORAGE_USER_ID, JSON.stringify(userId));
 };
 
 export const getAccessToken = (): string | null => {
@@ -19,18 +18,6 @@ export const getAccessToken = (): string | null => {
     if (!token) return null;
 
     return JSON.parse(token);
-  } else {
-    return null;
-  }
-};
-
-export const getUserId = (): number | null => {
-  if (typeof window !== "undefined") {
-    const userId = localStorage.getItem(LOCALSTORAGE_USER_ID);
-
-    if (!userId) return null;
-
-    return JSON.parse(userId);
   } else {
     return null;
   }
@@ -46,6 +33,19 @@ export const removeAccessToken = () => {
   localStorage.removeItem(LOCALSTORAGE_AUTH_TOKEN);
 };
 
-export const removeUserId = () => {
-  localStorage.removeItem(LOCALSTORAGE_USER_ID);
+export const getUsetDataFromLSToken = () => {
+  const token = getAccessToken();
+
+  if (!token)
+    return {
+      userEmail: null,
+      userId: null,
+    } as UserData;
+
+  const decodedToken = jwtDecode<DecodedToken>(token);
+
+  return {
+    userEmail: decodedToken.sub,
+    userId: decodedToken.userLoggedId,
+  };
 };

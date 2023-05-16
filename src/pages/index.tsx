@@ -15,7 +15,7 @@ import { useAppDispatch } from "common/store/hooks";
 import { login } from "core/store/userSlice";
 import { useRouter } from "next/router";
 import { getAccessToken, isTokenExpired } from "common/auth/tokens";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const validationSchema = yup.object({
   username: yup.string().required(),
@@ -32,7 +32,8 @@ const IndexPage: NextPage = () => {
 
   const token = getAccessToken();
 
-  useLayoutEffect(() => {
+  //// previously it was useLayoutEffect
+  useEffect(() => {
     if (token && !isTokenExpired(token)) {
       router.push(PATHS_QUOTES.QUOTES_LIST);
     } else {

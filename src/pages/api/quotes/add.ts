@@ -10,12 +10,19 @@ import {
 
 const addQuoteHandler: NextApiHandler = async (request, response) => {
   try {
-    const { token, posted, ...values } = request.body as RequestAddQuote & {
+    const { token, ...values } = request.body as RequestAddQuote & {
       token: string;
     };
 
-    await axiosInstance.post(
-      `${API_URL}/quote/post`,
+    console.log({
+      token,
+      values,
+      WHERE: "addQuoteHandler",
+      url_to_api: `${API_URL}/quote/post`,
+    });
+
+    const res = await axiosInstance.post(
+      `/quote/post`,
       values as RequestAddQuote,
       {
         headers: {
@@ -24,8 +31,11 @@ const addQuoteHandler: NextApiHandler = async (request, response) => {
       }
     );
 
+    console.log({ addQuoteHandler_res: res });
+
     response.json({ message: "Pomyślnie utworzono cytat" } as SuccessfulReqMsg);
   } catch (err) {
+    console.log({ addQuoteHandler_err: (err as any).response.data });
     response.status(400).json({
       message: "Wystąpił błąd. Sprawdź połączenie i poprawność danych",
     } as FailedReqMsg);

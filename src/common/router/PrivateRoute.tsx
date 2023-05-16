@@ -5,7 +5,6 @@ import {
 } from "common/auth/tokens";
 import { PATHS_CORE } from "common/constants/paths";
 import { useRouter } from "next/router";
-import UserProfileWrapper from "common/wrappers/UserProfileWrapper";
 import { logoutQueryKey, logoutQueryValue } from "pages";
 
 export interface PrivateRouteProps {
@@ -25,7 +24,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     router.push(`${PATHS_CORE.LOGIN}?${logoutQueryKey}=${logoutQueryValue}`);
   }
 
-  return <UserProfileWrapper>{children}</UserProfileWrapper>;
+  return <>{children}</>;
 };
 
 export default PrivateRoute;

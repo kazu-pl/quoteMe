@@ -3,6 +3,8 @@ export interface RequestLoginCredentials {
   password: string;
 }
 
+export type ResponseLoginAccessToken = string;
+
 export interface RequestRegisterCredentials {
   username: string;
   password: string;
@@ -35,4 +37,21 @@ export interface RequestAddQuote {
   author: string;
   quote: string;
   posted: number;
+}
+
+export interface ResponseSingleQuote {
+  id: number;
+  author: string;
+  quote: string;
+  posted: number;
+}
+
+export interface DecodedToken {
+  exp: number;
+  iat: number;
+  /**
+   * User email
+   */
+  sub: string;
+  userLoggedId: number;
 }

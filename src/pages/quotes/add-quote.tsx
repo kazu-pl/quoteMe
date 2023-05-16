@@ -9,16 +9,20 @@ import InputReactHookForm from "components/reactHookForm/InputReactHookForm";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { useAppDispatch } from "common/store/hooks";
 import { addQuote } from "features/quotes/quotesSlice";
-import { RequestAddQuote, SuccessfulReqMsg } from "types/api.types";
+import {
+  FailedReqMsg,
+  RequestAddQuote,
+  SuccessfulReqMsg,
+} from "types/api.types";
 import Box from "components/Box/Box";
 import Button from "antd/lib/button";
+import NumberInputReactHookForm from "components/reactHookForm/NumberInputReactHookForm/InputReactHookForm";
 
 const validationSchema = yup.object({
   author: yup.string().required(),
   quote: yup.string().required(),
+  posted: yup.number().required(),
 });
-
-interface FormValues extends Omit<RequestAddQuote, "posted"> {}
 
 const AddQuotePage: NextPage = () => {
   const dispatch = useAppDispatch();
@@ -33,20 +37,24 @@ const AddQuotePage: NextPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values: RequestAddQuote) => {
     try {
-      const response = await dispatch(addQuote({ ...values, posted: 1 }));
+      const response = await dispatch(addQuote(values));
 
       const { message } = response.payload as SuccessfulReqMsg;
+
       notification.success({
         message: null,
         description: message,
       });
       reset();
     } catch (error) {
+      const messageToDispaly =
+        typeof error === "string" ? error : (error as FailedReqMsg).message;
+
       notification.error({
         message: null,
-        description: error as string,
+        description: messageToDispaly,
       });
     }
   };
@@ -85,6 +93,17 @@ const AddQuotePage: NextPage = () => {
                   placeholder="quote"
                   error={errors.quote}
                   label="Wprowadź cytat"
+                  disabled={isSubmitting}
+                />
+              </Box>
+
+              <Box marginBottom={15}>
+                <NumberInputReactHookForm
+                  name="posted"
+                  control={control}
+                  placeholder="Rok"
+                  error={errors.posted}
+                  label="Wprowadź rok"
                   disabled={isSubmitting}
                 />
               </Box>
