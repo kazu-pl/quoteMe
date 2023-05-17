@@ -12,9 +12,10 @@ import {
   AppstoreOutlined,
   PieChartOutlined,
   LogoutOutlined,
+  FilePdfTwoTone,
 } from "@ant-design/icons";
-// import Link from "next/link";
 import { Fragment } from "react";
+import Link from "next/link";
 
 export interface DashboardWrapperProps
   extends Pick<DashboardLayoutProps, "title" | "children"> {}
@@ -50,6 +51,13 @@ const DashboardWrapper = ({ title, children }: DashboardWrapperProps) => {
           icon: <PieChartOutlined />,
           label: "Dodaj cytat",
           to: PATHS_QUOTES.QUOTES_ADD,
+          renderBottomLine: true,
+        },
+        {
+          variant: "no-dropdown",
+          icon: <FilePdfTwoTone />,
+          label: "LOSUJ CYTAT",
+          to: PATHS_QUOTES.GET_QUOTE_PDF,
         },
       ]}
       extra={
@@ -58,11 +66,11 @@ const DashboardWrapper = ({ title, children }: DashboardWrapperProps) => {
             <Button onClick={handleLogout}>Wyloguj</Button>
           </StyledDesktopBtnWrapper>
 
-          {/* <StyledDesktopBtnWrapper>
-            <Link href={PATHS_GAME.GAME}>
-              <a className="ant-btn ant-btn-primary">Graj</a>
-            </Link>
-          </StyledDesktopBtnWrapper> */}
+          <Link href={PATHS_QUOTES.GET_QUOTE_PDF}>
+            <a className="ant-btn ant-btn-primary" target="_blank">
+              <FilePdfTwoTone /> LOSUJ CYTAT
+            </a>
+          </Link>
 
           <StyledMobileBtnWrapper>
             <Button onClick={handleLogout} shape="circle" danger>

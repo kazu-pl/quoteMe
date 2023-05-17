@@ -90,13 +90,16 @@ const IndexPage: NextPage = () => {
     <>
       <HeadDecorator title="Logowanie" description="Strona logowania" />
 
-      <CoreView title="Logowanie">
+      <CoreView
+        title="Logowanie"
+        description="Zalouj się do aplikacji, dodawaj nowe cytaty i generuj losowe cytaty w formacie PDF!"
+      >
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box marginBottom={15}>
             <InputReactHookForm
               name="username"
               control={control}
-              placeholder="e-mail"
+              placeholder="Login"
               error={errors.username}
               label="Wprowadź login"
             />

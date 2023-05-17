@@ -45,15 +45,22 @@ const DashboardPage: NextPage = () => {
             </Typography.Title>
           </Box>
 
-          {isLoading && <Spin />}
-
-          {error && (
+          {isLoading ? (
+            <Spin />
+          ) : error ? (
             <Typography.Title
               level={5}
               style={{ fontWeight: "normal", color: "red" }}
             >
               Nie udało się pobrać lisy cytatów
             </Typography.Title>
+          ) : data === null || (Array.isArray(data) && data.length === 0) ? (
+            <div>
+              Nic tu nie ma. Dodaj cytaty już teraz, aby móc je przeglądać i
+              losować!
+            </div>
+          ) : (
+            <></>
           )}
 
           <Space size={[16, 16]} wrap>

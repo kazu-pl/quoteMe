@@ -12,7 +12,7 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import React from "react";
 
 // below code prevents warning of not using useLayoutEffect in SSR. Solution was found here: https://gist.github.com/gaearon/e7d97cdf38a2907924ea12e4ebdf3c85#gistcomment-3886909
-// if (!process.browser) React.useLayoutEffect = React.useEffect;
+if (!process.browser) React.useLayoutEffect = React.useEffect;
 
 notification.config({
   closeIcon: <CloseCircleOutlined />,
