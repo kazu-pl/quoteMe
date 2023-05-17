@@ -1,6 +1,6 @@
 import {
   FailedReqMsg,
-  RequestAddQuote,
+  // RequestAddQuote,
   ResponseSingleQuote,
   SuccessfulReqMsg,
 } from "types/api.types";
@@ -17,7 +17,7 @@ import {
 } from "features/quotes/quotesSlice";
 import QuoteForm, { FormValues } from "features/quotes/components/QuoteForm";
 
-import { UseFormReset } from "react-hook-form";
+// import { UseFormReset } from "react-hook-form";
 const { Title, Paragraph } = Typography;
 
 export interface QuoteDetailsProps {
@@ -67,7 +67,8 @@ const QuoteDetails = ({
   };
 
   const handleEdit =
-    (reset: UseFormReset<RequestAddQuote>) => async (values: FormValues) => {
+    // const handleEdit = (reset: UseFormReset<RequestAddQuote></RequestAddQuote>) => async ...
+    () => async (values: FormValues) => {
       try {
         const response = await dispatch(editQuote({ ...values, id: data.id }));
 

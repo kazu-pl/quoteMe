@@ -51,7 +51,7 @@ const IndexPage: NextPage = () => {
       const response = await dispatch(register(rest));
       notification.success({
         message: null,
-        description: response.payload,
+        description: response.payload as string,
       });
       router.push(PATHS_CORE.LOGIN);
     } catch (err) {
