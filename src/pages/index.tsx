@@ -4,7 +4,7 @@ import { message, notification, Spin } from "antd";
 import CoreView from "layouts/CoreView";
 import { useForm } from "react-hook-form";
 import InputReactHookForm from "components/reactHookForm/InputReactHookForm";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import yup from "common/yup";
 import Box from "components/Box";
 import Link from "next/link";

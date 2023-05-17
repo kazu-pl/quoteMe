@@ -2,7 +2,7 @@ import yup from "common/yup/yup";
 import Box from "components/Box/Box";
 import InputReactHookForm from "components/reactHookForm/InputReactHookForm/InputReactHookForm";
 import { RequestAddQuote } from "types/api.types";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, UseFormReset } from "react-hook-form";
 
 import Button from "antd/lib/button";
