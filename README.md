@@ -7,7 +7,7 @@ QuoteMe to nowatorski projekt aplikacji służącej dodawaniu cytatów oraz gene
 - React
 - Next
 - TypeScript
-- Redux
+- Redux Toolkit
 - React Hook Form
 - Ant Design
 
