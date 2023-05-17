@@ -1,22 +1,23 @@
 import { LOCALSTORAGE_AUTH_TOKEN } from "common/constants/auth";
 import jwtDecode, { JwtPayload } from "jwt-decode";
+import { DecodedToken } from "types/api.types";
 
-interface Tokens {
-  accessToken: string;
-  refreshToken: string;
+export interface UserData {
+  userId: number | null;
+  userEmail: string | null;
 }
 
-export const saveTokens = (tokens: Tokens) => {
-  localStorage.setItem(LOCALSTORAGE_AUTH_TOKEN, JSON.stringify(tokens));
+export const saveAccessToken = (token: string) => {
+  localStorage.setItem(LOCALSTORAGE_AUTH_TOKEN, JSON.stringify(token));
 };
 
-export const getTokens = (): Tokens | null => {
+export const getAccessToken = (): string | null => {
   if (typeof window !== "undefined") {
-    const tokens = localStorage.getItem(LOCALSTORAGE_AUTH_TOKEN);
+    const token = localStorage.getItem(LOCALSTORAGE_AUTH_TOKEN);
 
-    if (!tokens) return null;
+    if (!token) return null;
 
-    return JSON.parse(tokens);
+    return JSON.parse(token);
   } else {
     return null;
   }
@@ -28,6 +29,23 @@ export const isTokenExpired = (token: string) => {
   return decodedToken.exp ? decodedToken.exp < Date.now() / 1000 : true;
 };
 
-export const removeTokens = () => {
+export const removeAccessToken = () => {
   localStorage.removeItem(LOCALSTORAGE_AUTH_TOKEN);
+};
+
+export const getUsetDataFromLSToken = () => {
+  const token = getAccessToken();
+
+  if (!token)
+    return {
+      userEmail: null,
+      userId: null,
+    } as UserData;
+
+  const decodedToken = jwtDecode<DecodedToken>(token);
+
+  return {
+    userEmail: decodedToken.sub,
+    userId: decodedToken.userLoggedId,
+  };
 };

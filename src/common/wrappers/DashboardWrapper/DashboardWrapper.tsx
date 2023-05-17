@@ -1,9 +1,9 @@
 import { Button } from "antd";
 import DashboardLayout, { DashboardLayoutProps } from "layouts/Dashboard";
-import { useAppDispatch, useAppSelector } from "common/store/hooks";
-import { logout, selectUserProfile } from "core/store/userSlice";
+import { useAppDispatch } from "common/store/hooks";
+import { logout } from "core/store/userSlice";
 import { useRouter } from "next/router";
-import { PATHS_CORE, PATHS_DASHBOARD } from "common/constants/paths";
+import { PATHS_CORE, PATHS_QUOTES } from "common/constants/paths";
 import {
   StyledDesktopBtnWrapper,
   StyledMobileBtnWrapper,
@@ -12,10 +12,10 @@ import {
   AppstoreOutlined,
   PieChartOutlined,
   LogoutOutlined,
+  FilePdfTwoTone,
 } from "@ant-design/icons";
-// import Link from "next/link";
 import { Fragment } from "react";
-import { API_URL } from "common/constants/env";
+import Link from "next/link";
 
 export interface DashboardWrapperProps
   extends Pick<DashboardLayoutProps, "title" | "children"> {}
@@ -23,7 +23,6 @@ export interface DashboardWrapperProps
 const DashboardWrapper = ({ title, children }: DashboardWrapperProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const userProfileData = useAppSelector(selectUserProfile);
 
   const handleLogout = async () => {
     try {
@@ -38,27 +37,27 @@ const DashboardWrapper = ({ title, children }: DashboardWrapperProps) => {
   return (
     <DashboardLayout
       title={title}
-      subTitle={
-        userProfileData
-          ? `Witaj, ${userProfileData.name} ${userProfileData.surname}`
-          : ""
-      }
-      avatarUrl={
-        userProfileData?.avatar ? API_URL + userProfileData?.avatar : ""
-      }
+      avatarUrl={""}
       sidebarItems={[
         {
           variant: "no-dropdown",
           label: "Dashboard",
           icon: <AppstoreOutlined />,
-          to: PATHS_DASHBOARD.DASHBOARD,
+          to: PATHS_QUOTES.QUOTES_LIST,
+          renderBottomLine: true,
         },
         {
           variant: "no-dropdown",
           icon: <PieChartOutlined />,
-          label: "accout",
-          to: PATHS_CORE.ACCOUNT,
+          label: "Dodaj cytat",
+          to: PATHS_QUOTES.QUOTES_ADD,
           renderBottomLine: true,
+        },
+        {
+          variant: "no-dropdown",
+          icon: <FilePdfTwoTone />,
+          label: "LOSUJ CYTAT",
+          to: PATHS_QUOTES.GET_QUOTE_PDF,
         },
       ]}
       extra={
@@ -67,11 +66,11 @@ const DashboardWrapper = ({ title, children }: DashboardWrapperProps) => {
             <Button onClick={handleLogout}>Wyloguj</Button>
           </StyledDesktopBtnWrapper>
 
-          {/* <StyledDesktopBtnWrapper>
-            <Link href={PATHS_GAME.GAME}>
-              <a className="ant-btn ant-btn-primary">Graj</a>
-            </Link>
-          </StyledDesktopBtnWrapper> */}
+          <Link href={PATHS_QUOTES.GET_QUOTE_PDF}>
+            <a className="ant-btn ant-btn-primary" target="_blank">
+              <FilePdfTwoTone /> LOSUJ CYTAT
+            </a>
+          </Link>
 
           <StyledMobileBtnWrapper>
             <Button onClick={handleLogout} shape="circle" danger>
