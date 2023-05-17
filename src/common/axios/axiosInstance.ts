@@ -20,7 +20,6 @@ axiosInstance.interceptors.response.use(
             : error.response.data
         ); // returns data object which is the data send my server so i can dispaly msg that server send to front
       } else {
-        console.log({ error_in_axios: err });
         return Promise.reject({
           message: `An error occurred but server didn't send any error data`,
         } as FailedReqMsg);

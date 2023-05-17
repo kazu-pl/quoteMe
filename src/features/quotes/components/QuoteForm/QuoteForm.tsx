@@ -60,7 +60,6 @@ const QuoteForm = ({
           error={errors.quote}
           label="Wprowadź cytat"
           disabled={isSubmitting}
-          maxLength={10}
         />
       </Box>
 
