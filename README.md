@@ -14,7 +14,7 @@ QuoteMe to nowatorski projekt aplikacji służącej dodawaniu cytatów oraz gene
 
 ### Inne:
 
-- Rozwijane na: Node 14.21.3
+- Rozwijane na: Node 18.15.0
 
 ---
 
